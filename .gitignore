@@ -97,3 +97,8 @@ docs/.vitepress/cache/
 
 # for scripts
 clones
+
+# for laravel
+public/storage
+public/hot
+vendor/
