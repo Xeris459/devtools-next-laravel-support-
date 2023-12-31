@@ -65,6 +65,7 @@ const rawValue = computed(() => {
 
 const normalizedChildField = computed(() => {
   let { value, inherit } = rawValue.value
+
   if (Array.isArray(value)) {
     // @TODO: show more
     const sliced = value.slice(0, 20)
@@ -77,15 +78,21 @@ const normalizedChildField = computed(() => {
     }))
   }
   else if (typeof value === 'object') {
-    value = Object.keys(value).map(key => ({
-      key: `${props.data.key}.${key}`,
-      value: value[key],
-      ...inherit,
-      editable: props.data.editable,
-      creating: false,
-    }))
-    if (type !== 'custom')
-      value = sortByKey(value)
+    if (value) {
+      value = Object.keys(value).map(key => ({
+        key: `${props.data.key}.${key}`,
+        value: value[key],
+        ...inherit,
+        editable: props.data.editable,
+        creating: false,
+      }))
+
+      if (type !== 'custom')
+        value = sortByKey(value)
+    }
+    else {
+      value = []
+    }
   }
   else {
     value = []

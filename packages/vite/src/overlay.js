@@ -3,12 +3,13 @@ import { Bridge, prepareInjection, setDevToolsClientUrl } from '@vue/devtools-co
 import { BROADCAST_CHANNEL_NAME } from '@vue/devtools-shared'
 import { addCustomTab, devtools } from '@vue/devtools-kit'
 
-const overlayDir = `${vueDevToolsOptions.base || '/'}@id/virtual:vue-devtools-path:overlay`
+const overlayBaseUrl = vueDevToolsOptions.clientHost || vueDevToolsOptions.base || '/'
+const overlayDir = `${overlayBaseUrl}@id/virtual:vue-devtools-path:overlay`
 const body = document.getElementsByTagName('body')[0]
 const head = document.getElementsByTagName('head')[0]
 
 window.__VUE_DEVTOOLS_VITE_PLUGIN_DETECTED__ = true
-const devtoolsClientUrl = `${vueDevToolsOptions.clientHost || ''}${vueDevToolsOptions.base || '/'}__devtools__/`
+const devtoolsClientUrl = `${overlayBaseUrl}__devtools__/`
 setDevToolsClientUrl(devtoolsClientUrl)
 
 devtools.init()
@@ -20,7 +21,7 @@ addCustomTab({
   icon: 'i-carbon-ibm-watson-discovery',
   view: {
     type: 'iframe',
-    src: `${window.location.origin}${vueDevToolsOptions.base || '/'}__inspect`,
+    src: `${overlayBaseUrl}__inspect`,
   },
   category: 'advanced',
 })
@@ -42,7 +43,7 @@ head.appendChild(link)
 body.appendChild(script)
 
 // Used in the browser extension
-window.__VUE_DEVTOOLS_VITE_PLUGIN_CLIENT_URL__ = `${window.location.origin}${devtoolsClientUrl}`
+window.__VUE_DEVTOOLS_VITE_PLUGIN_CLIENT_URL__ = `${devtoolsClientUrl}`
 
 // @TODO: refactor separate window channel
 const channel = new BroadcastChannel(BROADCAST_CHANNEL_NAME)
